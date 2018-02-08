@@ -22,7 +22,7 @@ def check(user, password):
     time.sleep(2)
 
     driver.get("https://www.spotify.com/us/account/overview/")
-    parse = BeautifulSoup(driver.page_source, 'html5lib')
+    parse = BeautifulSoup(driver.page_source, 'html-parser')
     for h3 in parse.find_all('h3', {'class': "product-name"}):
         print('{}:{}:{}'.format(user, password, h3.get_text()))
 
